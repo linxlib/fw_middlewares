@@ -1,4 +1,4 @@
-package c
+package basic_auth
 
 import (
 	"crypto/subtle"

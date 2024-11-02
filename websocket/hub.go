@@ -1,8 +1,8 @@
-package fw_middlewares
+package websocket
 
 import (
 	"bytes"
-	"github.com/fasthttp/websocket"
+	websocket2 "github.com/fasthttp/websocket"
 	"log"
 	"time"
 )
@@ -89,7 +89,7 @@ type Client struct {
 	hub *Hub
 
 	// The websocket connection.
-	conn *websocket.Conn
+	conn *websocket2.Conn
 
 	// Buffered channel of outbound messages.
 	send chan []byte
@@ -106,7 +106,7 @@ func (c *Client) readPump() {
 	for {
 		_, message, err := c.conn.ReadMessage()
 		if err != nil {
-			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure, websocket.CloseNoStatusReceived) {
+			if websocket2.IsUnexpectedCloseError(err, websocket2.CloseGoingAway, websocket2.CloseAbnormalClosure, websocket2.CloseNoStatusReceived) {
 				log.Printf("error: %v", err)
 			}
 			m := []byte(c.ID + "刚刚离开了")
@@ -131,11 +131,11 @@ func (c *Client) writePump() {
 			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
 			if !ok {
 				// The hub closed the channel.
-				c.conn.WriteMessage(websocket.CloseMessage, []byte{})
+				c.conn.WriteMessage(websocket2.CloseMessage, []byte{})
 				return
 			}
 
-			w, err := c.conn.NextWriter(websocket.TextMessage)
+			w, err := c.conn.NextWriter(websocket2.TextMessage)
 			if err != nil {
 				log.Println(err)
 				return
@@ -156,7 +156,7 @@ func (c *Client) writePump() {
 			}
 		case <-ticker.C:
 			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
-			if err := c.conn.WriteMessage(websocket.PingMessage, nil); err != nil {
+			if err := c.conn.WriteMessage(websocket2.PingMessage, nil); err != nil {
 				log.Println(err)
 				return
 			}

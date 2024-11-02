@@ -1,8 +1,8 @@
-package fw_middlewares
+package websocket
 
 import (
 	"errors"
-	"github.com/fasthttp/websocket"
+	websocket2 "github.com/fasthttp/websocket"
 	"github.com/linxlib/conv"
 	"github.com/linxlib/fw"
 	"github.com/valyala/fasthttp"
@@ -18,7 +18,7 @@ const websocketHubName = "WebsocketHub"
 func NewWebsocketHubMiddleware() fw.IMiddlewareCtl {
 	mw := &WebsocketHubMiddleware{
 		MiddlewareCtl: fw.NewMiddlewareCtl(websocketHubName, websocketHubAttr),
-		upgrade: websocket.FastHTTPUpgrader{
+		upgrade: websocket2.FastHTTPUpgrader{
 			ReadBufferSize:  1024,
 			WriteBufferSize: 1024,
 			CheckOrigin: func(ctx *fasthttp.RequestCtx) bool {
@@ -33,7 +33,7 @@ func NewWebsocketHubMiddleware() fw.IMiddlewareCtl {
 // used for chat
 type WebsocketHubMiddleware struct {
 	*fw.MiddlewareCtl
-	upgrade websocket.FastHTTPUpgrader
+	upgrade websocket2.FastHTTPUpgrader
 	hub     *Hub
 	route   string
 	method  string
@@ -49,7 +49,7 @@ func (w *WebsocketHubMiddleware) Router(ctx *fw.MiddlewareContext) []*fw.RouteIt
 			// 需要将hub注入到controller层
 			// context 是方法层的
 			// 或者在这个controller下的所有方法的context都注入进去
-			err := w.upgrade.Upgrade(context.GetFastContext(), func(ws *websocket.Conn) {
+			err := w.upgrade.Upgrade(context.GetFastContext(), func(ws *websocket2.Conn) {
 				client := &Client{hub: w.hub, conn: ws, send: make(chan []byte, 256), ID: conv.String(rand.IntN(100))}
 				client.hub.register <- client
 				log.Println("register client")
@@ -60,7 +60,7 @@ func (w *WebsocketHubMiddleware) Router(ctx *fw.MiddlewareContext) []*fw.RouteIt
 				client.readPump()
 			})
 			if err != nil {
-				var handshakeError websocket.HandshakeError
+				var handshakeError websocket2.HandshakeError
 				if errors.As(err, &handshakeError) {
 					log.Println(err)
 				}

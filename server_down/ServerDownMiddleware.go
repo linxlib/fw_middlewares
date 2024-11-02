@@ -1,4 +1,4 @@
-package fw_middlewares
+package server_down
 
 import (
 	"github.com/linxlib/fw"

@@ -1,4 +1,4 @@
-package fw_middlewares
+package log
 
 import (
 	"github.com/gookit/color"

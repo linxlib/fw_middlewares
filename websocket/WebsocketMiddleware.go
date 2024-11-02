@@ -1,9 +1,9 @@
-package fw_middlewares
+package websocket
 
 import (
 	"errors"
 	"fmt"
-	"github.com/fasthttp/websocket"
+	websocket2 "github.com/fasthttp/websocket"
 	"github.com/linxlib/fw"
 	"github.com/valyala/fasthttp"
 	"log"
@@ -17,7 +17,7 @@ const websocketName = "Websocket"
 func NewWebsocketMiddleware() fw.IMiddlewareMethod {
 	mw := &WebsocketMiddleware{
 		MiddlewareMethod: fw.NewMiddlewareMethod(websocketName, websocketAttr),
-		upgrade: websocket.FastHTTPUpgrader{
+		upgrade: websocket2.FastHTTPUpgrader{
 			CheckOrigin: func(ctx *fasthttp.RequestCtx) bool {
 				return true
 			},
@@ -30,13 +30,13 @@ func NewWebsocketMiddleware() fw.IMiddlewareMethod {
 // WebsocketMiddleware used for simple websocket communication with server
 type WebsocketMiddleware struct {
 	*fw.MiddlewareMethod
-	upgrade websocket.FastHTTPUpgrader
+	upgrade websocket2.FastHTTPUpgrader
 }
 
 func (w *WebsocketMiddleware) Execute(ctx *fw.MiddlewareContext) fw.HandlerFunc {
 	return func(context *fw.Context) {
 		fmt.Println(ctx.ControllerName, ctx.MethodName)
-		err := w.upgrade.Upgrade(context.GetFastContext(), func(ws *websocket.Conn) {
+		err := w.upgrade.Upgrade(context.GetFastContext(), func(ws *websocket2.Conn) {
 			defer ws.Close()
 			for {
 				mt, message, err := ws.ReadMessage()
@@ -73,7 +73,7 @@ func (w *WebsocketMiddleware) Execute(ctx *fw.MiddlewareContext) fw.HandlerFunc 
 
 		})
 		if err != nil {
-			var handshakeError websocket.HandshakeError
+			var handshakeError websocket2.HandshakeError
 			if errors.As(err, &handshakeError) {
 				log.Println(err)
 			}
