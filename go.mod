@@ -8,7 +8,7 @@ require (
 	github.com/fasthttp/websocket v1.5.11
 	github.com/gookit/color v1.5.4
 	github.com/linxlib/conv v1.1.1
-	github.com/linxlib/fw v0.5.2
+	github.com/linxlib/fw v0.5.3
 	github.com/sirupsen/logrus v1.9.3
 	github.com/valyala/fasthttp v1.58.0
 )
