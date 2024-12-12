@@ -8,7 +8,7 @@ require (
 	github.com/fasthttp/websocket v1.5.11
 	github.com/gookit/color v1.5.4
 	github.com/linxlib/conv v1.1.1
-	github.com/linxlib/fw v0.5.3
+	github.com/linxlib/fw v0.5.4
 	github.com/sirupsen/logrus v1.9.3
 	github.com/valyala/fasthttp v1.58.0
 )
@@ -23,9 +23,9 @@ require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gookit/filter v1.2.2 // indirect
 	github.com/gookit/goutil v0.6.18 // indirect
-	github.com/gookit/validate v1.5.2 // indirect
+	github.com/gookit/validate v1.5.3 // indirect
 	github.com/klauspost/compress v1.17.11 // indirect
-	github.com/linxlib/astp v0.2.16 // indirect
+	github.com/linxlib/astp v0.2.17 // indirect
 	github.com/linxlib/config v0.2.6 // indirect
 	github.com/linxlib/inject v0.1.3 // indirect
 	github.com/lithammer/fuzzysearch v1.1.8 // indirect
