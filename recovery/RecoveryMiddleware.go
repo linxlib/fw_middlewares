@@ -85,7 +85,7 @@ func (s *RecoveryMiddleware) Execute(ctx *fw.MiddlewareContext) fw.HandlerFunc {
 					}
 
 				}
-				context.String(500, errMsg)
+				context.JSON(500, fw.H{"error": errMsg})
 
 			}
 		}()
